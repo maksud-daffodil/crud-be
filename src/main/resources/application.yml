@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: crud
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=your_database
+    username: your_username
+    password: your_password
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
