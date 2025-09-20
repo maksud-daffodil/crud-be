@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public PageResponseDTO<List<UserResponseDTO>> listActiveUsersService(String search, Pageable paging) {
-        Page<User> pagedUserData = userRepository.findByNameLike(search, true, false, paging);
+        Page<User> pagedUserData = userRepository.findByNameLikeAndIsActiveAndIsDeleted(search, true, false, paging);
         List<UserResponseDTO> userResponseDTOList = pagedUserData.getContent().stream().map(User::toDTO).toList();
         return PageResponseDTO.<List<UserResponseDTO>>builder()
                 .currentPage(pagedUserData.getNumber())
@@ -79,6 +79,16 @@ public class UserService {
             throw new BusinessException("USER_DOES_NOT_EXIST", "The user you are looking for does not exist!");
         }
         userOptional.get().setIsDeleted(true);
+        userRepository.save(userOptional.get());
+        return true;
+    }
+
+    public Boolean toggleActiveStatusService(UUID userId) throws BusinessException {
+        Optional<User> userOptional = userRepository.findByIdAndIsDeleted(userId, false);
+        if (userOptional.isEmpty()) {
+            throw new BusinessException("USER_DOES_NOT_EXIST", "The user you are looking for does not exist!");
+        }
+        userOptional.get().setIsActive(!userOptional.get().getIsActive());
         userRepository.save(userOptional.get());
         return true;
     }

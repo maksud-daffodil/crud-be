@@ -15,6 +15,7 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmailAndIsActiveAndIsDeleted(String email, Boolean isActive, Boolean isDeleted);
     Optional<User> findByIdAndIsDeleted(UUID id, Boolean isDeleted);
+    Optional<User> findByIdAndIsActiveAndIsDeleted(UUID id, Boolean isActive, Boolean isDeleted);
 
     @Query(
             "SELECT u FROM User u " +
@@ -22,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
                     " AND u.isActive = :isActive" +
                     " AND u.isDeleted = :isDeleted"
     )
-    Page<User> findByNameLike(
+    Page<User> findByNameLikeAndIsActiveAndIsDeleted(
             @Param("name") String name,
             @Param("isActive") Boolean isActive,
             @Param("isDeleted") Boolean isDeleted,

@@ -63,4 +63,10 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/toggle-active-status/{userId}")
+    public ResponseEntity<BaseResponse<?>> toggleActiveStatus(@PathVariable("userId") UUID userId) throws BusinessException {
+        Boolean response = userService.toggleActiveStatusService(userId);
+        return ResponseEntity.ok(BaseResponse.ok(HttpStatus.OK.value(), response));
+    }
+
 }
