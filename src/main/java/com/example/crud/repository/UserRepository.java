@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query(
             "SELECT u FROM User u " +
-                    "WHERE u.firstName LIKE %:name%" +
+                    "WHERE (:name IS NULL OR u.firstName LIKE %:name% OR u.lastName LIKE %:name%)" +
                     " AND u.isActive = :isActive" +
                     " AND u.isDeleted = :isDeleted"
     )

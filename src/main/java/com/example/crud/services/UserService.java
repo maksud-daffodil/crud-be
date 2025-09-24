@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,7 +51,7 @@ public class UserService {
                 .build();
     }
 
-    public UserResponseDTO getSingleUserData(UUID userId) throws BusinessException {
+    public UserResponseDTO getUserDetailsService(UUID userId) throws BusinessException {
         Optional<User> userOptional = userRepository.findByIdAndIsDeleted(userId, false);
         if (userOptional.isEmpty()) {
             throw new BusinessException("USER_DOES_NOT_EXIST", "The user you are looking for does not exist!");
@@ -73,7 +74,7 @@ public class UserService {
         return userOptional.get().toDTO();
     }
 
-    public Boolean deleteUser(UUID userId) throws BusinessException {
+    public Boolean deleteUserService(UUID userId) throws BusinessException {
         Optional<User> userOptional = userRepository.findByIdAndIsDeleted(userId, false);
         if (userOptional.isEmpty()) {
             throw new BusinessException("USER_DOES_NOT_EXIST", "The user you are looking for does not exist!");
@@ -83,14 +84,25 @@ public class UserService {
         return true;
     }
 
-    public Boolean toggleActiveStatusService(UUID userId) throws BusinessException {
+//    public Boolean restoreUserService(UUID userId) throws BusinessException {
+//        Optional<User> userOptional = userRepository.findByIdAndIsDeleted(userId, true);
+//        if (userOptional.isEmpty()) {
+//            throw new BusinessException("USER_DOES_NOT_EXIST", "No deleted user of given ID exists!");
+//        }
+//        userOptional.get().setIsDeleted(false);
+//        userRepository.save(userOptional.get());
+//        return true;
+//    }
+
+    public Map toggleActiveStatusService(UUID userId) throws BusinessException {
         Optional<User> userOptional = userRepository.findByIdAndIsDeleted(userId, false);
         if (userOptional.isEmpty()) {
             throw new BusinessException("USER_DOES_NOT_EXIST", "The user you are looking for does not exist!");
         }
-        userOptional.get().setIsActive(!userOptional.get().getIsActive());
+        Boolean isActive = !userOptional.get().getIsActive();
+        userOptional.get().setIsActive(isActive);
         userRepository.save(userOptional.get());
-        return true;
+        return Map.of("isActive", isActive);
     }
 
 }

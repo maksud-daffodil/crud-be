@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -35,7 +36,7 @@ public class UserController {
 
     @GetMapping("/list")
     public ResponseEntity<BaseResponse<?>> listUsers(
-            @RequestParam String search,
+            @RequestParam(required = false) String search,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable paging
     ) {
         PageResponseDTO<List<UserResponseDTO>> response = userService.listActiveUsersService(search, paging);
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<BaseResponse<?>> getSingleUserData(@PathVariable("userId") UUID userId) throws BusinessException {
-        UserResponseDTO response = userService.getSingleUserData(userId);
+    public ResponseEntity<BaseResponse<?>> getUserDetails(@PathVariable("userId") UUID userId) throws BusinessException {
+        UserResponseDTO response = userService.getUserDetailsService(userId);
         return ResponseEntity.ok(BaseResponse.ok(HttpStatus.OK.value(), response));
     }
 
@@ -59,13 +60,19 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<BaseResponse<?>> deleteUser(@PathVariable("userId") UUID userId) throws BusinessException {
-        Boolean response = userService.deleteUser(userId);
+        Boolean response = userService.deleteUserService(userId);
         return ResponseEntity.noContent().build();
     }
 
+//    @PatchMapping("/restore/{userId}")
+//    public ResponseEntity<BaseResponse<?>> restoreUser(@PathVariable("userId") UUID userId) throws BusinessException {
+//        Boolean response = userService.restoreUserService(userId);
+//        return ResponseEntity.noContent().build();
+//    }
+
     @PatchMapping("/toggle-active-status/{userId}")
     public ResponseEntity<BaseResponse<?>> toggleActiveStatus(@PathVariable("userId") UUID userId) throws BusinessException {
-        Boolean response = userService.toggleActiveStatusService(userId);
+        Map response = userService.toggleActiveStatusService(userId);
         return ResponseEntity.ok(BaseResponse.ok(HttpStatus.OK.value(), response));
     }
 

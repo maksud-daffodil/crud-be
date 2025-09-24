@@ -28,8 +28,8 @@ public class User extends Metadata {
     private String phone;
     private String email;
 
-    private Boolean isActive;
-    private Boolean isDeleted;
+    @Builder.Default
+    private Boolean isActive = false;
 
     @Transient
     public String getFullname() {

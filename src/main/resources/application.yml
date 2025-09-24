@@ -11,4 +11,10 @@ spring:
     database-platform: org.hibernate.dialect.SQLServerDialect
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG

@@ -13,6 +13,4 @@ public class UserCreationRequestDTO {
     private Date dateOfBirth;
     private String phone;
     private String email;
-    private Boolean isActive;
-    private Boolean isDeleted;
 }
